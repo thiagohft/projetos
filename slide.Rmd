@@ -1,0 +1,225 @@
+---
+title: "Projeto final - Análise de acidentes de trânsito em BH"
+subtitle: "Disciplina de Análise de dados - PPGA"
+author: "Bianca, Gabriel, Gilson, Thiago Silva e Thais"
+institute: "CEFET-MG"
+date: "13/04/2021"
+codificação: " UTF-8"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js 
+    css: ["fc", "tamu-fonts"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+# Justificativa:
+A complexidade do mundo que envolve os usuários de serviços públicos impede que os mesmos tenham acesso aos aspectos relevantes a uma tomada de decisão do gestor público. Simon (1979) aponta que os estímulos e a forma como estes se apresentam são relevantes na determinação da ação humana, em vista da racionalidade limitada do ser humano.O termo organização se refere a um complexo padrão de relacionamentos e comunicações humanas. Esse padrão fornece a maior parte das informações, pressupostos, objetivos e atitudes que interferem nas decisões (SIMON, 1979).O projeto tem por objetivo resguardar vidas humanas e preservar a integridade física de motoristas e pedestres. A tomada de decisão será subsidiada em dados e informações dos acidentes ocorridos no período de 01/01 a 12/08/2019, de forma a fundamentar e resguardar o interesse público do Município de Belo Horizonte quanto ao asfaltamento ou recapeamento de vias públicas de suas regionais.Uma tomada de decisão assertiva, especialmente no campo de atuação da Administração Pública, deve considerar a indisponibilidade do interesse público, a segurança e bem estar do cidadão, o menor custo e maior retorno possíveis, a fim de beneficiar a população.A tomada de decisão na Administração Pública deve envolver investimento para prevenir e resguardar vidas com o asfaltamento ou substituição do asfalto e, ainda, instalação de sinalização, com placas e semáforos, implantação de radares de velocidade e avanço de sinal, especialmente em cruzamentos, e complementar com campanha de conscientização de motoristas e pedestres, para proporcionar maior efetividade às ações de segurança no trânsito para todos.
+---
+# Série histórica - Belo Horizonte
+![Acidentes](C:/Users/thiagohft/Desktop/Backup do dia/dados 3.png)
+
+### Ainda no que tange a justificativa, nota-se por meio da seríe histórica que o numero de acidentes quando comparado com o ano de 2010 houve um pequeno declinio. Todavia, ao se analisar todo o período, verifica-se que não ha uma redução significativa nos resultados. Logo, expera-se por meio da análise exploratória dos dados, verificar algumas caracteristicas que influenciam nestes resultados. 
+
+Fonte: https://prefeitura.pbh.gov.br/sites/default/files/estrutura-de-governo/bhtrans/2020/2019-relatorio-de-acidente-de-transito-com-vitima.pdf
+---
+# Problema de pesquisa:
+A decisão da Prefeitura de Belo Horizonte (PBH) quanto ao investimento em asfaltamento ou recapeamento de ruas de suas regionais contribuiu no número de ocorrências de acidentes ocorridos no período de 1º de janeiro a 12 de agosto de 2019.
+---
+# Hipóteses:
+- Nas ocorrências com tipo de pavimento não informado há maior propensão a acidentes com vítimas fatais.
+
+- Nas ocorrências com tipo de pavimento asfalto há maior incidência de abalroamentos e colisões.
+
+- No tipo de pavimento não informado ocorre menor número de atropelamentos.
+
+- O maior número de acidentes com abalroamentos e colisões ocorrem a noite, de 18:01 às 06:00.
+
+- Há maior incidência de abalroamentos e colisões quando chove.
+
+- A principal causa de acidentes é a inexistência de sinalização na via.
+---
+# Estratégias Metodológicas:
+Para analisar o que se propõe, espera-se realizar a partir do banco de dados coletado no site da PBH:
+
+- Tratamento dos dados: análise de sua disposição
+Exemplos: dados faltantes, formato de casas decimais, remoção de colunas dispensáveis (número do boletim, cod_acidente, cod_tempo) e etc;
+
+- Apresentar estatísticas descritivas relativas aos dados analisados 
+Exemplos: quantidade de atropelamentos, abalroamentos e colisões, número de acidentes em pavimento de asfalto, percentual de acidentes em pavimento não informado, número de atropelamentos, abalroamentos e colisões de 18:01 às 06:00 (noite), percentual de ruas não sinalizadas nos acidentes e etc.
+---
+# Coleta dos dados:
+
+#### Neta etapa foram utilizados alguns comandos básicos para a análise exploratória de dados, como:
+
+I) visualização;
+II) Análise dos dados;
+III) limpeza e tratamento;
+IV) Apontamento e considerações sobre os resultados alcançados.
+
+![Base de dados bruta](C:/Users/thiagohft/Desktop/Backup do dia/tratamento.png)
+---
+#Base de dados Bruto:
+![Base de dados bruta](C:/Users/thiagohft/Desktop/Backup do dia/capturar.png)
+---
+# Análise preliminar dos dados:
+
+View(acidentes2019)
+
+nrow(acidentes2019)
+
+ncol(acidentes2019)
+
+head(acidentes2019)
+
+names(acidentes2019)
+
+glimpse(acidentes2019)
+---
+# Exclusão de colunas:
+acidentes2019$NUMERO_BOLETIM <-NULL
+
+acidentes2019$COD_TEMPO <-NULL
+
+acidentes2019$TIPO_ACIDENTE <-NULL
+
+acidentes2019$COD_PAVIMENTO <-NULL
+
+acidentes2019$COD_REGIONAL <-NULL
+
+head(acidentes2019)
+---
+# Padronização do tamanho da fonte e renomeação dos titulos das colunas:
+colnames(acidentes2019) [1] <-"Descrição_do_tipo_de_acidente"
+
+colnames(acidentes2019) [2] <-"Descrição_do_tempo"
+
+colnames(acidentes2019) [4] <-"Região_da_ocorrência"
+
+colnames(acidentes2019) [5] <-"Responsável_pelo_boletim"
+
+colnames(acidentes2019) [6] <-"Havia_sinalização"
+
+colnames(acidentes2019) [7] <-"Velocidade_permitida_km"
+
+colnames(acidentes2019) [8] <-"Houve_fatalidade"
+
+colnames(acidentes2019) [3] <-"Tipo_de_pavimento"
+acidentes2019
+---
+# Padronização dos dados:
+{r Padronização_dos_dados}
+Região_da_ocorrência <- acidentes2019 %>% 
+  mutate(Região_da_ocorrência = ifelse(is.na(Região_da_ocorrência), "NÃO INFORMADO", Região_da_ocorrência)) %>% 
+  mutate(Região_da_ocorrência = as.factor(Região_da_ocorrência)) %>% 
+  group_by(Região_da_ocorrência) %>% 
+  summarise(NUMERO_DE_OCORRÊNCIAS = n())
+
+Descrição_do_tipo_de_acidente <- acidentes2019 %>% 
+  mutate(Descrição_do_tipo_de_acidente = as.factor(Descrição_do_tipo_de_acidente)) %>% 
+  group_by(Descrição_do_tipo_de_acidente) %>% 
+  summarise(NUMERO_DE_OCORRÊNCIAS = n())
+  
+Descrição_do_tempo <- acidentes2019 %>% 
+  mutate(Descrição_do_tempo = as.factor(Descrição_do_tempo)) %>% 
+  group_by(Descrição_do_tempo) %>% 
+  summarise(NUMERO_DE_OCORRÊNCIAS = n())
+
+Responsável_pelo_boletim <- acidentes2019 %>%
+  mutate(Responsável_pelo_boletim = ifelse(is.na(Responsável_pelo_boletim), "NÃO INFORMADO", Responsável_pelo_boletim)) %>% 
+  mutate(Responsável_pelo_boletim = as.factor(Responsável_pelo_boletim)) %>% 
+  group_by(Responsável_pelo_boletim) %>% 
+  summarise(NUMERO_DE_OCORRÊNCIAS = n())
+---
+Havia_sinalização <- acidentes2019 %>%
+  mutate(Havia_sinalização = ifelse(is.na(Havia_sinalização), "NÃO INFORMADO", Havia_sinalização)) %>% 
+  mutate(Havia_sinalização = as.factor(Havia_sinalização)) %>% 
+  group_by(Havia_sinalização) %>% 
+  summarise(NUMERO_DE_OCORRÊNCIAS = n())
+
+Velocidade_permitida_km <- acidentes2019 %>%
+    mutate(Velocidade_permitida_km = as.factor(Velocidade_permitida_km)) %>% 
+  group_by(Velocidade_permitida_km) %>% 
+  summarise(NUMERO_DE_OCORRÊNCIAS = n())
+
+Houve_fatalidade <- acidentes2019 %>%
+    mutate(Houve_fatalidade = as.factor(Houve_fatalidade)) %>% 
+  group_by(Houve_fatalidade) %>% 
+  summarise(NUMERO_DE_OCORRÊNCIAS = n())
+
+Tipo_de_pavimento <- acidentes2019 %>%
+    mutate(Tipo_de_pavimento = as.factor(Tipo_de_pavimento)) %>% 
+  group_by(Tipo_de_pavimento) %>% 
+  summarise(NUMERO_DE_OCORRÊNCIAS = n())
+--- 
+---
+#Gráficos
+#Código utilizado para a confecção do dashboard  - clima por tipo de acidente
+ggplot(acidentes2019, aes(fill = Descrição_do_tempo, y= Descrição_do_tipo_de_acidente,)) +
+  geom_bar(position = "fill") +
+  labs(x="Descrição do Tempo", y="Tipo de Acidente", title="Gráfico clima por tipo de acidente") +
+  theme_clean()
+  Filtro - tirar observações não consistentes
+data_vel <- acidentes2019 %>% 
+  filter(Velocidade_permitida_km != 0)
+---  
+---
+#Dashboard - clima por tipo de acidente
+![Base de dados bruta](C:/Users/thiagohft/Desktop/Backup do dia/gráficos/1.png)
+---
+#Código utilizado para a confecção do dashboard - velocidade por fatalidade
+ggplot(data_vel, aes(fill = Houve_fatalidade, y= Velocidade_permitida_km)) +
+  geom_bar(position = "fill") +
+  labs(x="Fatalidade", y="Velocidade Permitida em Km/h", title="Gráfico velocidade por fatalidade") +
+  theme_clean()
+---
+#Dashboard - velocidade por fatalidade
+![Base de dados bruta](C:/Users/thiagohft/Desktop/Backup do dia/gráficos/2.png)
+---
+#Código utilizado para a confecção do dashboard - região por tipo de acidente
+ggplot(acidentes2019, aes(fill= Região_da_ocorrência, y= Descrição_do_tipo_de_acidente)) +
+  geom_bar(position = "fill") +
+  labs(x="Região", y="Tipo de Acidente", title = "Gráfico região por tipo de acidente") +
+  scale_color_brewer(palette = "Dark2", name="Região") +
+  theme_clean()
+---
+#Dashboard - região por tipo de acidente
+![Base de dados bruta](C:/Users/thiagohft/Desktop/Backup do dia/gráficos/3.png)
+---
+#Código utilizado para a confecção do dashboard - tipo de pavimento por fatalidade
+ggplot(acidentes2019, aes(fill= Tipo_de_pavimento, y= Houve_fatalidade)) +
+  geom_bar(position = "fill") +
+  labs(x="Tipo de Pavimento", y="Fatalidade", title = "Gráfico tipo de pavimento por fatalidade") +
+  theme_clean()
+---
+#Dashboard - tipo de pavimento por fatalidade
+![Base de dados bruta](C:/Users/thiagohft/Desktop/Backup do dia/gráficos/4.png)
+---
+#Código utilizado para a confecção do dashboard - pavimento por tipo de acidente
+ggplot(acidentes2019, aes(fill= Tipo_de_pavimento, y= Descrição_do_tipo_de_acidente)) +
+  geom_bar(position = "fill") +
+  labs(x="Tipo de Pavimento", y="Tipo de Acidente", title = "Gráfico tipo de pavimento por tipo de acidente") +
+  theme_clean()
+---
+#Dashboard - pavimento por tipo de acidente
+![Base de dados bruta](C:/Users/thiagohft/Desktop/Backup do dia/gráficos/5.png)
+---
+#Conclusões:
+---
+#O nosso muito obrigado:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
